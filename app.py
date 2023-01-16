@@ -145,8 +145,14 @@ def comment_delete():
 
 @app.route("/homework/l_modify", methods=["POST"])
 def modify_left():
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.users.find_one({"email": payload["id"]})
     voteId_Receive = request.form["voteId_give"]
-    print(voteId_Receive)
+    doc = {'voteid': voteId_Receive,
+           'email': user_info['email']
+           }
+    db.voteuser.insert_one(doc)
     left_num_receive = request.form["left_num_give"]
     db.vote.update_one({'count_id':int(voteId_Receive)},
                             {'$set': {'left_num': left_num_receive}})
@@ -154,7 +160,14 @@ def modify_left():
 
 @app.route("/homework/r_modify", methods=["POST"])
 def modify_right():
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.users.find_one({"email": payload["id"]})
     voteId_Receive = request.form["voteId_give"]
+    doc = {'voteid': voteId_Receive,
+           'email': user_info['email']
+           }
+    db.voteuser.insert_one(doc)
     right_num_receive = request.form["right_num_give"]
     db.vote.update_one({'count_id':int(voteId_Receive)},
                             {'$set': {'right_num': right_num_receive}})
@@ -170,6 +183,20 @@ def homework_get():
 
 
     return jsonify({'comment': comment_list})
+
+@app.route("/voteDisible", methods=["POST"])
+def voteDisible():
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.users.find_one({"email": payload["id"]})
+    voteId_Receive = request.form["voteId_give"]
+    comment_list = list(db.voteuser.find({"voteid":voteId_Receive,'email':user_info['email'] }, {'_id': False}))
+
+
+
+
+    return jsonify({'comment': comment_list})
+
 
 @app.route("/votingPost",methods=["POST"])
 def voting():

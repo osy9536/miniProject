@@ -89,7 +89,9 @@
         $(document).ready(function(){
            show_vote_per()
             show_comments();
+
         });
+
 
 
 
@@ -125,6 +127,17 @@
         function show_vote_per() {
             const urlParams = new URL(location.href).searchParams;
             const index = urlParams.get('voteid');
+            $.ajax({
+                type: "POST",
+                url: "/voteDisible",
+                async: false,
+                data: {voteId_give:index},
+                success: function (response) {
+                    tmp = response.comment;
+                }
+              });
+
+
 
             $.ajax({
                 type: "POST",
@@ -141,6 +154,7 @@
                     let right_num = Number(rows[0]['right_num'])
                     let l_num_percentage
                     let r_num_percentage
+
                     if(left_num+right_num==0){
                         l_num_percentage = 0
                         r_num_percentage = 0
@@ -158,28 +172,52 @@
                                             <h5> ${title}</h5>
                                          </div>`
                     $('#title-name').append(temp_html3)
-
-                    let temp_html2 = `
+                     let temp_html2 =``
+                    if (tmp.length>0){
+                       temp_html2 = `
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="card">
-                                                        <div class="card-body">
+                                                        <div class="card-body" id ="buttonbox1">
                                                             <h5 class="card-title">${left_name}</h5>
-                                                            <p class="card-text">${l_num_percentage}%</p>
-                                                            <button onclick="left_select('${left_name}',${left_num})" type="button" class="btn btn-secondary">선택</button>
+                                                            <p class="card-text" >${l_num_percentage}%</p>
+                                                            <button id="lbutton" onclick="already_vote()" type="button" class="btn btn-secondary">선택</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="card">
-                                                        <div class="card-body">
+                                                        <div class="card-body" id = "buttonbox2">
                                                             <h5 class="card-title">${right_name}</h5>
-                                                            <p class="card-text">${r_num_percentage}%</p>
-                                                            <button onclick="right_select('${right_name}',${right_num})" type="button" class="btn btn-secondary">선택</button>
+                                                            <p class="card-text" >${r_num_percentage}%</p>
+                                                            <button id="rbutton"   onclick="already_vote()" type="button" class="btn btn-secondary">선택</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>`
+                    }else{
+                    temp_html2 = `
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="card">
+                                                        <div class="card-body" id ="buttonbox1">
+                                                            <h5 class="card-title">${left_name}</h5>
+                                                            <p class="card-text" >${l_num_percentage}%</p>
+                                                            <button id="lbutton" onclick="left_select('${left_name}',${left_num})" type="button" class="btn btn-secondary">선택</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="card">
+                                                        <div class="card-body" id = "buttonbox2">
+                                                            <h5 class="card-title">${right_name}</h5>
+                                                            <p class="card-text" >${r_num_percentage}%</p>
+                                                            <button id="rbutton"   onclick="right_select('${right_name}',${right_num})" type="button" class="btn btn-secondary">선택</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`
+                        }
 
                     $('#vote_list').append(temp_html2)
 
@@ -262,6 +300,9 @@
                 }
             });
         }
+        function already_vote(){
+            alert("이미 투표 하셨습니다")
+        }
 
     </script>
 </head>
@@ -298,5 +339,7 @@
 
             </div>
     </div>
+
 </body>
+
 </html>

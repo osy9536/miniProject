@@ -81,6 +81,9 @@
          option {
             color: black;
         }
+         .order_box > comments1{
+             width: 500px
+         }
     </style>
     <script>
         $(document).ready(function(){
@@ -105,7 +108,7 @@
             })
         }
 
-        function left_select(l_name, l_num) {
+        function left_select(l_name, l_num,user_id) {
             let left_num=l_num+1
             $.ajax({
                 type: 'POST',
@@ -117,7 +120,7 @@
                 }
             })
         }
-        function right_select(r_name, r_num) {
+        function right_select(r_name, r_num,user_id) {
             let right_num=r_num+1
             $.ajax({
                 type: 'POST',
@@ -129,39 +132,50 @@
                 }
             })
         }
-        function show_vote_per(){
+
+        function show_vote_per() {
+            const urlParams = new URL(location.href).searchParams;
+            const index = urlParams.get('voteid');
             $.ajax({
                 type: "GET",
                 url: "/homework",
                 data: {},
                 success: function (response) {
                     let rows = response['comment']
-                    for (let i = 0; i < rows.length; i++) {
-                        let user_id = rows[i]['user_id']
-                        let title = rows[i]['title']
-                        let left_name = rows[i]['left_name']
-                        let left_num = Number(rows[i]['left_num'])
-                        let right_name = rows[i]['right_name']
-                        let right_num =  Number(rows[i]['right_num'])
-                        let l_num_percentage = Math.round(Number(left_num/(left_num+right_num))*100)
-                        let r_num_percentage = Math.round(Number(right_num/(left_num+right_num))*100)
-                        let temp_html1 = `<div class="user_id">
+                    console.log(response)
+                    let user_id = rows[index-1]['user_id']
+                    let title = rows[index-1]['title']
+                    let left_name = rows[index-1]['left_name']
+                    let left_num = Number(rows[index-1]['left_num'])
+                    let right_name = rows[index-1]['right_name']
+                    let right_num = Number(rows[index-1]['right_num'])
+                    let l_num_percentage
+                    let r_num_percentage
+                    if(left_num+right_num==0){
+                        l_num_percentage = 0
+                        r_num_percentage = 0
+                    } else {
+                        l_num_percentage = Math.round(Number(left_num / (left_num + right_num)) * 100)
+                        r_num_percentage = Math.round(Number(right_num / (left_num + right_num)) * 100)
+
+                    }
+                    let temp_html1 = `<div class="user_id">
                                             <h3> ${user_id}</h3>
                                           <div>`
-                        $('#users-id').append(temp_html1)
+                    $('#users-id').append(temp_html1)
 
-                        let temp_html3 = `<div>
+                    let temp_html3 = `<div>
                                             <h5> ${title}</h5>
                                          </div>`
-                        $('#title-name').append(temp_html3)
+                    $('#title-name').append(temp_html3)
 
-                        let temp_html2 = `
+                    let temp_html2 = `
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <h5 class="card-title">${left_name}</h5>
-                                                            <p class="card-text">${l_num_percentage} %</p>
+                                                            <p class="card-text">${l_num_percentage}%</p>
                                                             <button onclick="left_select('${left_name}',${left_num})" type="button" class="btn btn-secondary">선택</button>
                                                         </div>
                                                     </div>
@@ -177,8 +191,8 @@
                                                 </div>
                                             </div>`
 
-                        $('#vote_list').append(temp_html2)
-                    }
+                    $('#vote_list').append(temp_html2)
+
                 }
             });
         }
@@ -202,13 +216,15 @@
         }
 
         function save_order() {
+            const urlParams = new URL(location.href).searchParams;
+            const index = urlParams.get('voteid');
             let name = $('#name').val()
             let comment = $('#comment').val()
 
             $.ajax({
                 type: 'POST',
                 url: '/comment',
-                data: {name_give: name, comment_give: comment},
+                data: {name_give: name, comment_give: comment, voteId_give: index},
                 success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
@@ -232,25 +248,27 @@
 
         }
         function show_comments() {
+            const urlParams = new URL(location.href).searchParams;
+            const index = urlParams.get('voteid');
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "/comment/comments_list",
-                data: {},
+                data: {voteId_give: index},
                 success: function (response) {
                     let rows = response['comments']
                     for (let i = 0; i < rows.length; i++) {
-
                         let comment = rows[i]['comment']
                         let name = rows[i]['user_id']
                         let temp_html = `<li class="list-group-item d-flex justify-content-between">
-                                            <span id="comments" ">${comment} </span>
-                                            <span id="comments" ">${name} </span>
-                                            <button type="button" class="btn btn-danger delete" onclick="delete_comment('${name}')">삭제</button>
+                                            <span class="comments1">${comment} </span>
+                                            <span class="comments2">${name} </span>
                                          </li>`
 
                         $('#order-box').append(temp_html)
-
                     }
+
+
+
                 }
             });
         }
@@ -259,6 +277,9 @@
 </head>
 <body>
     <div class="wrap">
+        <div>
+            <button onclick="history.back()" type="button" class="btn btn-warning">이전</button>
+        </div>
         <div class="users" id="users-id" >
 
         </div>
@@ -281,15 +302,7 @@
 
                 </div>
                 <table class="table">
-                    <thead>
-                    <tr>
-                        <div>
-                            <th scope="col">댓글</th>
-                            <th scope="col">닉네임</th>
-                        </div>
-                    </tr>
-                    </thead>
-                    <tbody id="order-box">
+                    <tbody id="order-box" class="order_box">
                     </tbody>
                 </table>
 

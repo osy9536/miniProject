@@ -26,6 +26,9 @@
         * {
             font-family: 'Noto Serif KR', serif;
         }
+        body{
+            background-color: wheat;
+        }
 
         .mypic {
 
@@ -66,11 +69,11 @@
 
 
         function voteViewDetail(voteid){
-              location.href="/voteViewDetail?voteid="+voteid;
+              location.href="/detail?voteid="+voteid;
               //alert("투표 상세보기 페이지 이동");
         }
          function voteInsert(){
-              location.href="/voteInsert";
+              location.href="/votingPost";
              //alert("투표 등록 페이지 이동");
         }
 
@@ -95,12 +98,12 @@
 
 
                     row.map((data, idx) => {
-                        $('#voteList').append(`<div onclick="voteViewDetail(${data.voteid})" class="card text-bg-light mb-3" >
-                                                <div class="card-header" style="text-align: center">${data.userid}</div>
+                        $('#voteList').append(`<div onclick="voteViewDetail(${data.count_id})" class="card text-bg-light mb-3" >
+                                                <div class="card-header" style="text-align: center">${data.user_id}</div>
                                                 <div class="card-body">
-                                                    <h5 class="card-title" style="text-align: center">${data.voteTitle}</h5>
-                                                    <p class="card-text" style="text-align: center">${data.choice1} vs ${data.choice2}</p>
-                                                    <p class="card-text" ><i class="bi bi-person"></i> ${Number(data.choice1_count) + Number(data.choice2_count)}</p>
+                                                    <h5 class="card-title" style="text-align: center">${data.title}</h5>
+                                                    <p class="card-text" style="text-align: center">${data.left_name} vs ${data.right_name}</p>
+                                                    <p class="card-text" ><i class="bi bi-person"></i> ${Number(data.left_num) + Number(data.right_num)}</p>
                                                     </div>
                                                 </div>`)
                     })

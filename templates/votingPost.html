@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>votingPost page</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+
+</head>
+
+<style>
+
+    body {
+        background-color: wheat;
+    }
+
+    .writing_box {
+        background-color: rgb(248, 243, 235);
+        width : 700px;
+
+        border: 1px solid darkslategray;
+        width: 95%;
+        max-width: 700px;
+        height: 800px;
+        margin: 0px auto 0px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .title_box {
+        margin: 0px auto 0px auto;
+        border-radius: 10px;
+    }
+
+    .card {
+        margin-bottom: 60px;
+    }
+
+    .button_group > button {
+        text-align: center;
+        display: inline-block;
+    }
+
+    .card-body {
+        background-color: darkorange;
+    }
+
+    .card {
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+</style>
+
+
+<script>
+
+
+    function save_info() {
+        let left_num = 0
+        let right_num = 0
+
+
+        $.ajax({
+            type: "POST",
+            url: "/votingPost",
+            data: {voting_title_give : $('#floatingInputValue').val(),
+                   voting1_body_give : $('#voting1').val(),
+                   voting2_body_give : $('#voting2').val(),
+                   left_num_give: left_num,
+                    right_num_give: right_num
+            },
+            success: function (response) {
+                alert(response['msg'])
+                window.location.href = "/voteView"
+            }
+        })
+
+    }
+
+
+</script>
+
+
+<body>
+
+<div class="wrap">
+    <div class="writing_box">
+        <div class="title_box">
+            <input id="floatingInputValue" type="text" placeholder="투표 제목을 입력해주세요" style="width:400px;height:70px;font-size:30px;">
+        </div>
+
+
+        <div class="voting_body">
+            <div class="card">
+                <div class="card-header">
+                    투표항목1
+                </div>
+                <div class="card-body">
+                    <p><input class="voting_body" id="voting1" type="text"></p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    투표항목2
+                </div>
+                <div class="card-body">
+                    <p><input class="voting_body" id="voting2" type="text"></p>
+                </div>
+            </div>
+        </div>
+        <div class="button_group">
+            <button type="button" class="btn btn-warning" onclick="save_info()">등록</button>
+            <button type="button" class="btn btn-warning" onclick="history.back()">취소</button>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

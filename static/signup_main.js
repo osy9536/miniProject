@@ -59,12 +59,6 @@ function save_account() {
         }
     }
 
-    // 약관 동의 제어
-    if (!cAll.checked) {
-        alert("약관에 동의하세요")
-        return;
-    }
-
 
     // 회원가입 정보 포스트
     $.ajax({
@@ -92,13 +86,8 @@ fieldList.forEach(field => field.addEventListener('focus', (e) => {
 const showName = () => {
     $('#welcome-area').empty()
     $('#welcome-area').append('<h8 style="color: white">.</h8>')
-    let firstName = $('#firstName').val()
-    let lastName = $('#lastName').val()
-    if (firstName === '' || lastName === '') {
-        return
-    }
-    let fullName = lastName + firstName
-    let tmp_html = `<h8 id="welcome-name">${fullName}님 반갑습니다.</h8>`
+    let eMail = $('#str_email01').val()
+    let tmp_html = `<h8 id="welcome-name">${eMail}님 반갑습니다.</h8>`
     $('#welcome-area').append(tmp_html)
     $('#welcome-name').fadeIn(2000)
 

@@ -65,18 +65,13 @@ def sign_in():
 ##### 회원가입
 ca = certifi.where()
 
-client = MongoClient(
-    'mongodb+srv://osy9536:~tpdud434861@cluster0.u6oggvp.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.dbvote
-
-
 @app.route('/voteView')
-def home():
+def voteview():
     return render_template('voteView.html')
 
 @app.route("/voteViewData", methods=["GET"])
-def homework_post():
-    all_voteList = list(db.voteList.find({}, {'_id': False}))
+def homework_post2():
+    all_voteList = list(db.vote.find({}, {'_id': False}))
 
     return jsonify({'msg':all_voteList})
 
@@ -90,7 +85,7 @@ def sign_up():
 #로그인 완료 시 메인 페이지로 이동
 @app.route('/page/main')
 def page_main():
-    return render_template('detail.html')
+    return render_template('voteView.html')
 
 @app.route("/api/signup", methods=["POST"])
 def web_signup_post():
@@ -117,9 +112,11 @@ def web_comments_post():
         payload=jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
         user_info = db.users.find_one({"email": payload["id"]})
         comment_receive = request.form['comment_give']
+        vote_receive = request.form['voteId_give']
         doc = {
             'user_id': user_info["email"],
-            'comment': comment_receive
+            'comment': comment_receive,
+            'vote_id': vote_receive
         }
         db.comments.insert_one(doc)
 
@@ -132,9 +129,10 @@ def web_comments_post():
 def web_comments_get():
     order_list = list(db.comments.find({}, {'_id': False}))
     return jsonify({'comments': order_list})
-@app.route("/comment/comments_list", methods=["GET"])
+@app.route("/comment/comments_list", methods=["POST"])
 def posting_comments_list_get():
-    comments_list = list(db.comments.find({}, {'_id': False}))
+    voteId_Receive= request.form["voteId_give"]
+    comments_list = list(db.comments.find({'vote_id':voteId_Receive}, {'_id': False}))
     return jsonify({'comments': comments_list})
 
 @app.route("/comment/delete", methods=["POST"])
@@ -149,51 +147,59 @@ def comment_delete():
 def modify_left():
     left_name_receive = request.form["left_name_give"]
     left_num_receive = request.form["left_num_give"]
-    db.homework3.update_one({'left_name': left_name_receive},
+    db.vote.update_one({'left_name': left_name_receive},
                             {'$set': {'left_num': left_num_receive}})
     return jsonify({'msg': '투표 완료!'})
 
 @app.route("/homework/r_modify", methods=["POST"])
 def modify_right():
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({"email": payload["id"]})
-        right_name_receive = request.form["right_name_give"]
-        right_num_receive = request.form["right_num_give"]
-        db.homework3.update_one({'right_name': right_name_receive},
-                                {'$set': {'right_num': right_num_receive, 'user_id': user_info["email"]}})
-        return jsonify({'msg': '투표 완료!'})
-
-    except(jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("home"))
+    right_name_receive = request.form["right_name_give"]
+    right_num_receive = request.form["right_num_give"]
+    db.vote.update_one({'right_name': right_name_receive},
+                            {'$set': {'right_num': right_num_receive}})
+    return jsonify({'msg': '투표 완료!'})
 
 
 @app.route("/homework", methods=["GET"])
 def homework_get():
-    comment_list = list(db.homework3.find({}, {'_id': False}))
+    comment_list = list(db.vote.find({}, {'_id': False}))
 
     return jsonify({'comment': comment_list})
-@app.route("/homework", methods=["POST"])
-def homework_post():
-    title_receive = request.form["title_give"]
-    user_id_receive = request.form["user_id_give"]
-    left_name_receive = request.form["left_name_give"]
-    left_num_receive = request.form["left_num_give"]
-    right_name_receive = request.form["right_name_give"]
-    right_num_receive = request.form["right_num_give"]
 
-    doc = {
-        'user_id': user_id_receive,
-        'title': title_receive,
-        'left_name': left_name_receive,
-        'left_num': left_num_receive,
-        'right_name': right_name_receive,
-        'right_num': right_num_receive
-    }
-    db.homework3.insert_one(doc)
+@app.route("/votingPost",methods=["POST"])
+def voting():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        left_name_receive = db.users.find_one({'email': payload["id"]})
+        print(left_name_receive)
+        right_num_receive = request.form['right_num_give']
+        left_num_receive = request.form['left_num_give']
+        voting_title_receive = request.form['voting_title_give']
+        voting1_body_receive = request.form['voting1_body_give']
+        voting2_body_receive = request.form['voting2_body_give']
+        cnt = db.count.find_one({})
+        doc = {'count_id': cnt["cnt"],
+                'user_id' : left_name_receive["email"],
+               'title':voting_title_receive,
+               'left_name':voting1_body_receive,
+               'right_name':voting2_body_receive,
+               'right_num': right_num_receive,
+               'left_num': left_num_receive}
+        db.vote.insert_one(doc)
+        db.count.update_one({},
+                            {'$set': {'cnt': cnt["cnt"]+1}})
+        return jsonify({'msg': '투표글 작성 완료'})
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("/login_1", msg="로그인 정보가 존재하지 않습니다."))
+@app.route("/votingPost")
+def goto_votingPost():
+    return render_template('votingPost.html');
 
-    return jsonify({'msg': '저장완료!'})
+@app.route("/detail")
+def goto_detail():
+    return render_template('detail.html');
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

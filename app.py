@@ -145,24 +145,29 @@ def comment_delete():
 
 @app.route("/homework/l_modify", methods=["POST"])
 def modify_left():
-    left_name_receive = request.form["left_name_give"]
+    voteId_Receive = request.form["voteId_give"]
+    print(voteId_Receive)
     left_num_receive = request.form["left_num_give"]
-    db.vote.update_one({'left_name': left_name_receive},
+    db.vote.update_one({'count_id':int(voteId_Receive)},
                             {'$set': {'left_num': left_num_receive}})
     return jsonify({'msg': '투표 완료!'})
 
 @app.route("/homework/r_modify", methods=["POST"])
 def modify_right():
-    right_name_receive = request.form["right_name_give"]
+    voteId_Receive = request.form["voteId_give"]
     right_num_receive = request.form["right_num_give"]
-    db.vote.update_one({'right_name': right_name_receive},
+    db.vote.update_one({'count_id':int(voteId_Receive)},
                             {'$set': {'right_num': right_num_receive}})
     return jsonify({'msg': '투표 완료!'})
 
 
-@app.route("/homework", methods=["GET"])
+@app.route("/homework", methods=["POST"])
 def homework_get():
-    comment_list = list(db.vote.find({}, {'_id': False}))
+    voteId_Receive = request.form["voteId_give"]
+
+    comment_list = list(db.vote.find({'count_id':int(voteId_Receive)}, {'_id': False}))
+
+
 
     return jsonify({'comment': comment_list})
 

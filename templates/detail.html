@@ -91,29 +91,16 @@
             show_comments();
         });
 
-        function save_comment(){
-            let user_id = "name"
-            let title = "치킨vs피자"
-            let left_name = "치킨"
-            let right_name = "피자"
-            let left_num = 0
-            let right_num = 0
-            $.ajax({
-                type: 'POST',
-                url: '/homework',
-                data: {user_id_give : user_id, title_give : title ,left_name_give:left_name,left_num_give:left_num, right_name_give : right_name, right_num_give : right_num},
-                success: function (response) {
-                    alert(response['msg'])
-                }
-            })
-        }
+
 
         function left_select(l_name, l_num,user_id) {
+            const urlParams = new URL(location.href).searchParams;
+            const index = urlParams.get('voteid');
             let left_num=l_num+1
             $.ajax({
                 type: 'POST',
                 url: '/homework/l_modify',
-                data: {left_name_give: l_name, left_num_give : left_num},
+                data: {voteId_give:index ,left_name_give: l_name, left_num_give : left_num},
                 success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
@@ -121,11 +108,13 @@
             })
         }
         function right_select(r_name, r_num,user_id) {
+            const urlParams = new URL(location.href).searchParams;
+            const index = urlParams.get('voteid');
             let right_num=r_num+1
             $.ajax({
                 type: 'POST',
                 url: '/homework/r_modify',
-                data: {right_name_give: r_name, right_num_give : right_num},
+                data: {voteId_give:index ,right_name_give: r_name, right_num_give : right_num},
                 success: function (response) {
                     alert(response['msg'])
                     window.location.reload()
@@ -136,19 +125,20 @@
         function show_vote_per() {
             const urlParams = new URL(location.href).searchParams;
             const index = urlParams.get('voteid');
+
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "/homework",
-                data: {},
+                data: {voteId_give:index},
                 success: function (response) {
                     let rows = response['comment']
-                    console.log(response)
-                    let user_id = rows[index-1]['user_id']
-                    let title = rows[index-1]['title']
-                    let left_name = rows[index-1]['left_name']
-                    let left_num = Number(rows[index-1]['left_num'])
-                    let right_name = rows[index-1]['right_name']
-                    let right_num = Number(rows[index-1]['right_num'])
+
+                    let user_id = rows[0]['user_id']
+                    let title = rows[0]['title']
+                    let left_name = rows[0]['left_name']
+                    let left_num = Number(rows[0]['left_num'])
+                    let right_name = rows[0]['right_name']
+                    let right_num = Number(rows[0]['right_num'])
                     let l_num_percentage
                     let r_num_percentage
                     if(left_num+right_num==0){

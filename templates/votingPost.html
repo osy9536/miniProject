@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>votingPost page</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+
+</head>
+
+<style>
+
+    .writing_box {
+        border: 1px solid darkslategray;
+        width: 95%;
+        max-width: 700px;
+        height: 800px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+
+        margin: 60px auto 20px auto;
+    }
+
+    .card {
+        margin-bottom: 60px;
+    }
+
+    .button_group > button {
+        text-align: center;
+        display: inline-block;
+    }
+
+
+</style>
+
+
+<script>
+
+    function save_info() {
+
+        $.ajax({
+            type: "POST",
+            url: "/votingPost",
+            data: {voting_title_receive : $('#floatingInputValue').val(),
+                   voting1_body_receive : $('#voting1').val(),
+                   voting2_body_receive : $('#voting2').val()
+            },
+            success: function (response) {
+                alert('msg')
+            }
+        })
+        window.location.reload()
+    }
+
+
+    function voting_cancel() {
+        location.href = "/main"
+    }
+
+
+</script>
+
+
+<body>
+
+<div class="wrap">
+    <div class="writing_box">
+        <div class="title_box">
+            <form class="form-floating">
+                <input type="email" class="form-control" id="floatingInputValue" placeholder="name@example.com"
+                       value="test@example.com">
+                <label for="floatingInputValue">제목을 입력하세요</label>
+            </form>
+        </div>
+
+
+        <div class="voting_body">
+            <div class="card">
+                <div class="card-header">
+                    투표항목1
+                </div>
+                <div class="card-body">
+                    <p><input class="voting_body" id="voting1" type="text"></p>
+                    <button type="button" class="btn btn-outline-warning btn-sm">투표하기</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    투표항목2
+                </div>
+                <div class="card-body">
+                    <p><input class="voting_body" id="voting2" type="text"></p>
+                    <button type="button" class="btn btn-outline-warning btn-sm">투표하기</button>
+                </div>
+            </div>
+        </div>
+        <div class="button_group">
+            <button onclick="save_info()" type="button" class="btn btn-outline-primary btn-lg">등록</button>
+            <button onclick="voting_cancel()" type="button" class="btn btn-outline-primary btn-lg">취소</button>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

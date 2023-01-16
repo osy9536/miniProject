@@ -69,6 +69,19 @@ client = MongoClient(
     'mongodb+srv://osy9536:~tpdud434861@cluster0.u6oggvp.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbvote
 
+
+@app.route('/voteView')
+def home():
+    return render_template('voteView.html')
+
+@app.route("/voteViewData", methods=["GET"])
+def homework_post():
+    all_voteList = list(db.voteList.find({}, {'_id': False}))
+
+    return jsonify({'msg':all_voteList})
+
+
+
 #회원가입 버튼 클릭시 이동
 @app.route('/signup')
 def sign_up():

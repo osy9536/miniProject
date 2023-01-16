@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+    <title></title>
+
+    <style>
+        * {
+            font-family: 'Gowun Batang', serif;
+            color: black;
+
+        }
+
+        body {
+
+        }
+
+        h1 {
+            font-weight: bold;
+        }
+
+        .order {
+            width: 500px;
+            margin: 60px auto 0px auto;
+            padding-bottom: 60px;
+        }
+
+        .order > table {
+            margin: 40px 0;
+            font-size: 18px;
+        }
+
+        option {
+            color: black;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            show_order();
+            show_comments();
+        });
+
+        function show_order() {
+            $('.allbox').empty()
+            $.ajax({
+                type: 'GET',
+                url: '/comment',
+                data: {},
+                success: function (response) {
+                    let rows = response['comments']
+                    for (let i = 0; i < rows.length; i++) {
+                        let name = rows[i]['name']
+                        let comment = rows[i]['comment']
+
+                        let temp_html = ``
+                        $('#order-box').append(temp_html)
+                    }
+                }
+            });
+        }
+
+        function save_order() {
+            let name = $('#name').val()
+            let comment = $('#comment').val()
+
+            $.ajax({
+                type: 'POST',
+                url: '/comment',
+                data: {name_give: name, comment_give: comment},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            });
+        }
+         function delete_comment(name) {
+            if (confirm("코멘트를 삭제하시겠습니까?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/comment/delete",
+                    data: {name_give: name},
+                    success: function (response) {
+                        alert(response["msg"]);
+                        window.location.reload()
+                    }
+                });
+            } else {
+                alert("취소하였습니다!")
+            }
+
+        }
+          function show_comments() {
+            $.ajax({
+                type: "GET",
+                url: "/comment/comments_list",
+                data: {},
+                success: function (response) {
+                    let rows = response['comments']
+                    for (let i = 0; i < rows.length; i++) {
+
+                        let comment = rows[i]['comment']
+                        let name = rows[i]['name']
+                        let temp_html = `<li class="list-group-item d-flex justify-content-between">
+                                            <span id="comments" data-id="${name}">${comment} </span>
+                                            <button type="button" class="btn btn-danger delete" onclick="delete_comment('${name}')">삭제</button>
+                                         </li>`
+
+                        $('#order-box').append(temp_html)
+
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="order">
+    <h1>댓글 달기</h1>
+    <div class="order-info">
+        <div class="input-group mb-3" id="name">
+        </div>
+         <div class="input-group mb-3">
+            <span class="input-group-text">댓글</span>
+            <input id="comment" type="text" class="form-control">
+        <button onclick="save_order()" type="button" class="btn btn-outline-warning">댓글달기</button>
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+        <div>
+            <th scope="col">댓글</th>
+            <th scope="col">닉네임</th>
+        </div>
+        </tr>
+        </thead>
+        <tbody id="order-box">
+        </tbody>
+    </table>
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="투표 리스트" />
+<meta property="og:description" content="투표 리스트 입니다" />
+<meta property="og:image" content="https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg" />
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
+    <title>투표 리스트</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
+          rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .mypic {
+            width: 100%;
+            height: 300px;
+
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('http://www.coindeskkorea.com/news/photo/201805/20180531_1_22123.jpg');
+            background-position: center 30%;
+            background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .mycards {
+            width: 95%;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .mycards .card{
+            margin-top : 10px;
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function () {
+
+            showVote();
+        });
+
+
+
+        function voteViewDetail(voteid){
+              location.href="/voteViewDetail?voteid="+voteid;
+              //alert("투표 상세보기 페이지 이동");
+        }
+         function voteInsert(){
+              location.href="/voteInsert";
+             //alert("투표 등록 페이지 이동");
+        }
+
+        function showVote() {
+            $.ajax({
+                type: "GET",
+                url: "/voteViewData",
+                data: {},
+                success: function (response) {
+                    $('#comment-list').empty()
+                    console.log(response)
+                    let row = response.msg
+                    if (row.length == 0) {
+                        $('#voteList').append(`<div onclick="voteViewDetail()" class="card text-bg-light mb-3" >
+                                                <div class="card-header" style="text-align: center">데이터 없음</div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title" style="text-align: center">데이터가 없습니다</h5>
+
+                                                    </div>
+                                                </div>`)
+                    } else {
+
+
+                    row.map((data, idx) => {
+                        $('#voteList').append(`<div onclick="voteViewDetail(${data.voteid})" class="card text-bg-light mb-3" >
+                                                <div class="card-header" style="text-align: center">${data.userid}</div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title" style="text-align: center">${data.voteTitle}</h5>
+                                                    <p class="card-text" style="text-align: center">${data.choice1} vs ${data.choice2}</p>
+                                                    <p class="card-text" ><i class="bi bi-person"></i> ${Number(data.choice1_count) + Number(data.choice2_count)}</p>
+                                                    </div>
+                                                </div>`)
+                    })
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="container text-center">
+    <div class="row" style="height: 100%">
+        <div class="col-xs-2 col-sm-1 col-md-2 col-lg-3 col-xl-3 col-xxl-4" >
+
+        </div>
+        <div class="col-xs-8 col-sm-10 col-md-8 col-lg-6 col-xl-6 col-xxl-4"  style="background-color: #FFD945" >
+            <div class="mypic">
+                <h1>투표 리스트</h1>
+
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" style ="margin-top:5px" type="button" onclick="voteInsert()">투표 등록</button>
+            </div>
+
+            <div class="mycards" id="voteList" style="width: 100%;">
+
+            </div>
+        </div>
+        <div class="col-xs-2 col-sm-1 col-md-2 col-lg-3 col-xl-3 col-xxl-4 >
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

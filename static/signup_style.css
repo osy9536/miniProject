@@ -1,6 +1,6 @@
 
 body {
-    background-color: black;
+    background-color: wheat;
     color: black;
 }
 
@@ -12,7 +12,9 @@ a {
     width: 400px;
     margin: 0 auto;
     margin-top: 50px;
+
 }
+
 
 #logo {
     width: 400px;
@@ -23,6 +25,7 @@ a {
     background-size: cover;
     background-position: center;
     text-align: center;
+    border-radius: 200px;
 }
 
 #logo-box {
@@ -42,7 +45,7 @@ a {
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    background-color: white;
+    background-color:  rgb(248, 243, 235);
     width: 600px;
     padding:20px;
     border-radius: 15px;
@@ -75,12 +78,6 @@ a {
     margin-top: 20px;
     font-size: 30px;
     font-weight: 900;
-}
-
-#submit-button {
-    width: 100px;
-    margin-bottom: 30px;
-    cursor: url(./img/TikTok-2.png), auto;
 }
 
 #selectEmail {

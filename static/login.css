@@ -1,6 +1,6 @@
 
         body {
-            background-color: black;
+            background-color: wheat;
             color: white;
         }
 
@@ -15,9 +15,10 @@
             height: 200px;
             background-color: green;
             margin-bottom: 60px;
-            background-image: url("https://th.bing.com/th/id/R.7e7965cef3528e9e8cb2047bb63eca42?rik=0oFqa%2flgAFXRyQ&riu=http%3a%2f%2fwww.upinews.kr%2fdata%2fupi%2fimage%2f2020%2f03%2f05%2fupi202003050217.515x.null.jpg&ehk=PylAcCA%2bLLEnO8OZpfid8R0Uyfqke6SAqb0GU1whGdE%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1");
+            background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOwgj3zx97XzYswWgwEIuRRNKoy40hBA44HO8e72Dteks4FagLUzhbsTKhWh15TVJcHsw&usqp=CAU");
             background-repeat: no-repeat;
             background-size: cover;
+            border-radius: 200px;
             backgroun-position: center;
         }
 
@@ -29,7 +30,7 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 20px;
-            background-color: white;
+            background-color:  rgb(248, 243, 235);;
             border-radius: 15px;
         }
 

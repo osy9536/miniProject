@@ -1,5 +1,7 @@
-import jwt, datetime, hashlib, certifi
-
+import certifi
+import datetime
+import hashlib
+import jwt
 from flask import Flask, render_template, request, jsonify, url_for, redirect
 
 app = Flask(__name__)
@@ -10,8 +12,9 @@ from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
 
-client = MongoClient('mongodb+srv://yunseo:sparta@cluster0.6bemlvq.mongodb.net/?retryWrites=true&w=majority')
-db = client.dbsparta
+client = MongoClient(
+    'mongodb+srv://osy9536:~tpdud434861@cluster0.u6oggvp.mongodb.net/Cluster0?retryWrites=true&w=majority')
+db = client.dbvote
 
 ##### 로그인
 SECRET_KEY = 'SPARTA'
@@ -51,7 +54,8 @@ def sign_in():
     result = db.users.find_one({'email': email_receive, 'password': pw_hash})
     # 찾으면 토큰을 만들어 발급합니다.
     if result is not None:
-        payload = {'id': email_receive, 'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)}
+        payload = {'id': email_receive,
+                   'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)}
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
         return jsonify({'result': 'success', 'token': token, 'msg': '로그인 성공!'})
     else:
@@ -61,9 +65,9 @@ def sign_in():
 ##### 회원가입
 ca = certifi.where()
 
-client = MongoClient('mongodb+srv://yunseo:sparta@cluster0.6bemlvq.mongodb.net/?retryWrites=true&w=majority',
-                     tlsCAFile=ca)
-db = client.dbsparta
+client = MongoClient(
+    'mongodb+srv://osy9536:~tpdud434861@cluster0.u6oggvp.mongodb.net/Cluster0?retryWrites=true&w=majority')
+db = client.dbvote
 
 #회원가입 버튼 클릭시 이동
 @app.route('/signup')
@@ -73,7 +77,7 @@ def sign_up():
 #로그인 완료 시 메인 페이지로 이동
 @app.route('/page/main')
 def page_main():
-    return render_template('titleList.html')
+    return render_template('detail.html')
 
 @app.route("/api/signup", methods=["POST"])
 def web_signup_post():
@@ -93,83 +97,84 @@ def web_signup_get():
     user_list = list(db.users.find({}, {'_id': False}))
     return jsonify({'users': user_list})
 
-##### 메인페이지
-@app.route("/music", methods=["POST"])
-def music_post():
-    url_receive = request.form['url_give']
-
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-data = requests.get('https://www.melon.com/landing/playList.htm?type=djc&plylstTypeCode=M20002&plylstSeq=453051002',
-                    headers=headers)
-
-soup = BeautifulSoup(data.text, 'html.parser')
-
-images = soup.select_one('div > table > tbody > tr')
-
-a = soup.select('#frm > div > table > tbody > tr')
-
-for music in a:
-    for img in images:
-        b = music.select_one('div > a > img')
-    rank = music.select_one('div > span.rank').text[0:2].strip()
-    title = music.select_one('div > div > div.ellipsis.rank01 > span > a').text.strip()
-    singer = music.select_one('div > div > div.ellipsis.rank02 > a').text
-    album = music.select_one('td:nth-child(6) > div > div > div > a').text
-    if music is not None:
-        doc = {
-            'image': b['src'],
-            'rank': rank,
-            'title': title,
-            'singer': singer,
-            'album': album
-        }
-        db.musics.insert_one(doc)
-
-
-@app.route("/music", methods=["GET"])
-def music_get():
-    music_list = list(db.musics.find({}, {'_id': False}))
-    return jsonify({'musics': music_list})
-
-##### 상세페이지
-@app.route('/page/detail/')
-def detail():
-    music_list = list(db.musics.find({}, {'_id': False}))
-    return render_template('posting.html')
-
-@app.route("/posting", methods=["GET"])
-def posting_detail_get():
-    music_list = list(db.musics.find({}, {'_id': False}))
-    return jsonify({'musics': music_list})
-
-@app.route("/posting/comments", methods=["POST"])
-def comment_post():
+@app.route("/comment", methods=["POST"])
+def web_comments_post():
+    name_receive = request.form['name_give']
     comment_receive = request.form['comment_give']
-    comment_list = list(db.comments.find({}, {'_id': False}))
-    count = len(comment_list) + 1
 
     doc = {
-        'num': count,
-        'comment': comment_receive
+       'name':name_receive,
+        'comment':comment_receive
     }
     db.comments.insert_one(doc)
 
-    return jsonify({'msg': '저장되었습니다!'})
-
-@app.route("/posting/comments_list", methods=["GET"])
+    return jsonify({'msg': '등록 완료!'})
+@app.route("/comment", methods=["GET"])
+def web_comments_get():
+    order_list = list(db.comments.find({}, {'_id': False}))
+    return jsonify({'comments': order_list})
+@app.route("/comment/comments_list", methods=["GET"])
 def posting_comments_list_get():
     comments_list = list(db.comments.find({}, {'_id': False}))
     return jsonify({'comments': comments_list})
 
 @app.route("/comment/delete", methods=["POST"])
 def comment_delete():
-    comment_receive = request.form['comment_give']
+    name_list = request.form['name_give']
 
-    db.comments.delete_many({"comment":comment_receive})
-
+    db.comments.delete_one({"name": name_list})
     return jsonify({'msg': '삭제되었습니다!'})
+
+
+@app.route("/homework/l_modify", methods=["POST"])
+def modify_left():
+    left_name_receive = request.form["left_name_give"]
+    left_num_receive = request.form["left_num_give"]
+    db.homework3.update_one({'left_name': left_name_receive},
+                            {'$set': {'left_num': left_num_receive}})
+    return jsonify({'msg': '투표 완료!'})
+
+@app.route("/homework/r_modify", methods=["POST"])
+def modify_right():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"email": payload["id"]})
+        right_name_receive = request.form["right_name_give"]
+        right_num_receive = request.form["right_num_give"]
+        db.homework3.update_one({'right_name': right_name_receive},
+                                {'$set': {'right_num': right_num_receive, 'user_id': user_info["email"]}})
+        return jsonify({'msg': '투표 완료!'})
+
+    except(jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
+@app.route("/homework", methods=["GET"])
+def homework_get():
+    comment_list = list(db.homework3.find({}, {'_id': False}))
+
+    return jsonify({'comment': comment_list})
+@app.route("/homework", methods=["POST"])
+def homework_post():
+    title_receive = request.form["title_give"]
+    user_id_receive = request.form["user_id_give"]
+    left_name_receive = request.form["left_name_give"]
+    left_num_receive = request.form["left_num_give"]
+    right_name_receive = request.form["right_name_give"]
+    right_num_receive = request.form["right_num_give"]
+
+    doc = {
+        'user_id': user_id_receive,
+        'title': title_receive,
+        'left_name': left_name_receive,
+        'left_num': left_num_receive,
+        'right_name': right_name_receive,
+        'right_num': right_num_receive
+    }
+    db.homework3.insert_one(doc)
+
+    return jsonify({'msg': '저장완료!'})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

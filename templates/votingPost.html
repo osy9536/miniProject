@@ -20,18 +20,28 @@
 
 <style>
 
+    body {
+        background-color: wheat;
+    }
+
     .writing_box {
+        background-color: rgb(248, 243, 235);
+        width : 700px;
+
         border: 1px solid darkslategray;
         width: 95%;
         max-width: 700px;
         height: 800px;
-
+        margin: 0px auto 0px auto;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-evenly;
+    }
 
-        margin: 60px auto 20px auto;
+    .title_box {
+        margin: 0px auto 0px auto;
+        border-radius: 10px;
     }
 
     .card {
@@ -43,6 +53,13 @@
         display: inline-block;
     }
 
+    .card-body {
+        background-color: darkorange;
+    }
+
+    .card {
+        border: 1px solid black;
+    }
 
 </style>
 
@@ -67,7 +84,7 @@
 
 
     function voting_cancel() {
-        location.href = "/main"
+        location.href = "/voteView.html"
     }
 
 
@@ -79,11 +96,7 @@
 <div class="wrap">
     <div class="writing_box">
         <div class="title_box">
-            <form class="form-floating">
-                <input type="email" class="form-control" id="floatingInputValue" placeholder="name@example.com"
-                       value="test@example.com">
-                <label for="floatingInputValue">제목을 입력하세요</label>
-            </form>
+            <input type="text" placeholder="투표 제목을 입력해주세요" style="width:400px;height:70px;font-size:30px;">
         </div>
 
 
@@ -94,7 +107,6 @@
                 </div>
                 <div class="card-body">
                     <p><input class="voting_body" id="voting1" type="text"></p>
-                    <button type="button" class="btn btn-outline-warning btn-sm">투표하기</button>
                 </div>
             </div>
             <div class="card">
@@ -103,13 +115,12 @@
                 </div>
                 <div class="card-body">
                     <p><input class="voting_body" id="voting2" type="text"></p>
-                    <button type="button" class="btn btn-outline-warning btn-sm">투표하기</button>
                 </div>
             </div>
         </div>
         <div class="button_group">
-            <button onclick="save_info()" type="button" class="btn btn-outline-primary btn-lg">등록</button>
-            <button onclick="voting_cancel()" type="button" class="btn btn-outline-primary btn-lg">취소</button>
+            <button type="button" class="btn btn-warning">등록</button>
+            <button type="button" class="btn btn-warning">취소</button>
         </div>
 
 

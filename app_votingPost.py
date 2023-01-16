@@ -22,8 +22,8 @@ def voting():
         voting_title_receive = request.form['voting_title_give']
         voting1_body_receive = request.form['voting1_body_give']
         voting2_body_receive = request.form['voting2_body_give']
-        doc = {'name_2' : left_name_receive ,'title':voting_title_receive, 'voting1':voting1_body_receive, 'voting':voting2_body_receive }
-        db.users.insert_one(doc)
+        doc = {'name' : left_name_receive ,'title':voting_title_receive, 'voting1':voting1_body_receive, 'voting':voting2_body_receive }
+        db.vote.insert_one(doc)
         return jsonify({'msg': '투표글 작성 완료'})
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login_1", msg="로그인 시간이 만료되었습니다."))

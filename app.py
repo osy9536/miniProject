@@ -78,7 +78,6 @@ def page_main():
 @app.route("/api/signup", methods=["POST"])
 def web_signup_post():
     name_receive = request.form['name_give']
-    email_receive = request.form['email_give']
     password_receive = request.form['password_give']
 
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()

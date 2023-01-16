@@ -71,7 +71,7 @@ def voteview():
 
 @app.route("/voteViewData", methods=["GET"])
 def homework_post2():
-    all_voteList = list(db.vote.find({}, {'_id': False}))
+    all_voteList = list(db.vote.find({}, {'_id': False}).sort("count_id",-1))
 
     return jsonify({'msg':all_voteList})
 

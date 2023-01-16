@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <title>상세 페이지</title>
+
+    <style>
+        * {
+            font-family: 'Gowun Batang', serif;
+            color: black;
+
+        }
+        body {
+            background-color: wheat;
+            color: black;
+        }
+
+        .wrap{
+            background-color:  rgb(248, 243, 235);
+            width : 700px;
+            margin: 0px auto 0px auto;
+        }
+        .users {
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            padding: 50px;
+
+            margin: 0px auto 0px auto;
+        }
+        .title_name{
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            padding: 20px;
+            margin: 0 auto 0 auto;
+            font-size: 30px;
+        }
+        .vote_wrap {
+            width: 95%;
+            max-width: 500px;
+            margin: 20px auto 20px auto;
+            background-color: lightgray;
+            box-shadow: 0px 0px 3px 0px black;
+            padding: 10px;
+            border-radius: 15px;
+
+        }
+        .card{
+            color: white;
+            background-color: darkorange;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 30px;
+        }
+        h1 {
+            font-weight: bold;
+        }
+        .order {
+            width: 500px;
+            margin: 60px auto 0px auto;
+            padding-bottom: 60px;
+        }
+        .order > table {
+            margin: 40px 0;
+            font-size: 18px;
+        }
+         option {
+            color: black;
+        }
+    </style>
+    <script>
+        $(document).ready(function(){
+           show_vote_per()
+            show_comments();
+        });
+
+        function save_comment(){
+            let user_id = "name"
+            let title = "치킨vs피자"
+            let left_name = "치킨"
+            let right_name = "피자"
+            let left_num = 0
+            let right_num = 0
+            $.ajax({
+                type: 'POST',
+                url: '/homework',
+                data: {user_id_give : user_id, title_give : title ,left_name_give:left_name,left_num_give:left_num, right_name_give : right_name, right_num_give : right_num},
+                success: function (response) {
+                    alert(response['msg'])
+                }
+            })
+        }
+
+        function left_select(l_name, l_num) {
+            let left_num=l_num+1
+            $.ajax({
+                type: 'POST',
+                url: '/homework/l_modify',
+                data: {left_name_give: l_name, left_num_give : left_num},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            })
+        }
+        function right_select(r_name, r_num) {
+            let right_num=r_num+1
+            $.ajax({
+                type: 'POST',
+                url: '/homework/r_modify',
+                data: {right_name_give: r_name, right_num_give : right_num},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            })
+        }
+        function show_vote_per(){
+            $.ajax({
+                type: "GET",
+                url: "/homework",
+                data: {},
+                success: function (response) {
+                    let rows = response['comment']
+                    for (let i = 0; i < rows.length; i++) {
+                        let user_id = rows[i]['user_id']
+                        let title = rows[i]['title']
+                        let left_name = rows[i]['left_name']
+                        let left_num = Number(rows[i]['left_num'])
+                        let right_name = rows[i]['right_name']
+                        let right_num =  Number(rows[i]['right_num'])
+                        let l_num_percentage = Math.round(Number(left_num/(left_num+right_num))*100)
+                        let r_num_percentage = Math.round(Number(right_num/(left_num+right_num))*100)
+                        let temp_html1 = `<div class="user_id">
+                                            <h3> ${user_id}</h3>
+                                          <div>`
+                        $('#users-id').append(temp_html1)
+
+                        let temp_html3 = `<div>
+                                            <h5> ${title}</h5>
+                                         </div>`
+                        $('#title-name').append(temp_html3)
+
+                        let temp_html2 = `
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">${left_name}</h5>
+                                                            <p class="card-text">${l_num_percentage} %</p>
+                                                            <button onclick="left_select('${left_name}',${left_num})" type="button" class="btn btn-secondary">선택</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">${right_name}</h5>
+                                                            <p class="card-text">${r_num_percentage}%</p>
+                                                            <button onclick="right_select('${right_name}',${right_num})" type="button" class="btn btn-secondary">선택</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`
+
+                        $('#vote_list').append(temp_html2)
+                    }
+                }
+            });
+        }
+        function show_order() {
+            $('.allbox').empty()
+            $.ajax({
+                type: 'GET',
+                url: '/comment',
+                data: {},
+                success: function (response) {
+                    let rows = response['comments']
+                    for (let i = 0; i < rows.length; i++) {
+                        let name = rows[i]['name']
+                        let comment = rows[i]['comment']
+
+                        let temp_html = ``
+                        $('#order-box').append(temp_html)
+                    }
+                }
+            });
+        }
+
+        function save_order() {
+            let name = $('#name').val()
+            let comment = $('#comment').val()
+
+            $.ajax({
+                type: 'POST',
+                url: '/comment',
+                data: {name_give: name, comment_give: comment},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            });
+        }
+        function delete_comment(name) {
+            if (confirm("코멘트를 삭제하시겠습니까?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/comment/delete",
+                    data: {name_give: name},
+                    success: function (response) {
+                        alert(response["msg"]);
+                        window.location.reload()
+                    }
+                });
+            } else {
+                alert("취소하였습니다!")
+            }
+
+        }
+        function show_comments() {
+            $.ajax({
+                type: "GET",
+                url: "/comment/comments_list",
+                data: {},
+                success: function (response) {
+                    let rows = response['comments']
+                    for (let i = 0; i < rows.length; i++) {
+
+                        let comment = rows[i]['comment']
+                        let name = rows[i]['user_id']
+                        let temp_html = `<li class="list-group-item d-flex justify-content-between">
+                                            <span id="comments" ">${comment} </span>
+                                            <span id="comments" ">${name} </span>
+                                            <button type="button" class="btn btn-danger delete" onclick="delete_comment('${name}')">삭제</button>
+                                         </li>`
+
+                        $('#order-box').append(temp_html)
+
+                    }
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <div class="wrap">
+        <div class="users" id="users-id" >
+
+        </div>
+        <div class="title_name" id="title-name">
+
+        </div>
+        <div class="vote_wrap" id="vote_list">
+
+        </div>
+
+        <div class="order">
+            <h1>댓글 달기</h1>
+            <div class="order-info">
+                <div class="input-group mb-3" id="name">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">댓글</span>
+                    <input id="comment" type="text" class="form-control">
+                    <button onclick="save_order()" type="button" class="btn btn-outline-warning">댓글달기</button>
+
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <div>
+                            <th scope="col">댓글</th>
+                            <th scope="col">닉네임</th>
+                        </div>
+                    </tr>
+                    </thead>
+                    <tbody id="order-box">
+                    </tbody>
+                </table>
+
+            </div>
+    </div>
+</body>
+</html>

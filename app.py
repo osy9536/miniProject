@@ -99,16 +99,22 @@ def web_signup_get():
 
 @app.route("/comment", methods=["POST"])
 def web_comments_post():
-    name_receive = request.form['name_give']
-    comment_receive = request.form['comment_give']
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload=jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
+        user_info = db.users.find_one({"email": payload["id"]})
+        comment_receive = request.form['comment_give']
+        doc = {
+            'user_id': user_info["email"],
+            'comment': comment_receive
+        }
+        db.comments.insert_one(doc)
 
-    doc = {
-       'name':name_receive,
-        'comment':comment_receive
-    }
-    db.comments.insert_one(doc)
+        return jsonify({'msg': '등록 완료!'})
+    except(jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
-    return jsonify({'msg': '등록 완료!'})
+
 @app.route("/comment", methods=["GET"])
 def web_comments_get():
     order_list = list(db.comments.find({}, {'_id': False}))
@@ -122,7 +128,7 @@ def posting_comments_list_get():
 def comment_delete():
     name_list = request.form['name_give']
 
-    db.comments.delete_one({"name": name_list})
+    db.comments.delete_one({"user_id": name_list})
     return jsonify({'msg': '삭제되었습니다!'})
 
 

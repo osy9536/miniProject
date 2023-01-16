@@ -80,12 +80,6 @@ a {
     font-weight: 900;
 }
 
-#submit-button {
-    width: 100px;
-    margin-bottom: 30px;
-    cursor: url(./img/TikTok-2.png), auto;
-}
-
 #selectEmail {
     position: relative;
     left: 130px;

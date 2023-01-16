@@ -1,0 +1,86 @@
+
+        body{
+            background-color: black;
+            color:black;
+        }
+        .wrap{
+            width: 95%;
+            max-width: 1200px;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            padding: 50px;
+            margin: 0px auto 0px auto;
+        }
+
+        .logo-box{
+            width:400px;
+            height:200px;
+            background-image: url("https://th.bing.com/th/id/R.7e7965cef3528e9e8cb2047bb63eca42?rik=0oFqa%2flgAFXRyQ&riu=http%3a%2f%2fwww.upinews.kr%2fdata%2fupi%2fimage%2f2020%2f03%2f05%2fupi202003050217.515x.null.jpg&ehk=PylAcCA%2bLLEnO8OZpfid8R0Uyfqke6SAqb0GU1whGdE%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            margin: 0 auto 20px auto;
+
+        }
+
+        .post {
+            width: 95%;
+            max-width: 900px;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+        }
+
+        .post >.music_card {
+            text-align: center;
+
+            float: top;
+        }
+
+        .post >.music_card >.album {
+            width: 95%;
+            max-width: 300px;
+            padding: 20px;
+            margin: 0 0 20px 0;
+
+            display: flex;
+
+            float: left;
+        }
+
+        .post >.music_card > .card {
+            max-width: 500px;
+            width: 95%;
+            margin: 20px;
+            padding: 25px;
+
+            float: right;
+
+            text-align: center;
+        }
+
+        .post > .music_comments {
+            margin-top: 20px;
+
+            float: bottom;
+        }
+
+        .post > .music_comments >.posting {
+            max-width: 1200px;
+            width: 95%;
+            margin: 20px;
+        }
+
+        .post > .music_comments >.comments {
+            max-width: 1200px;
+            width: 95%;
+
+            margin: 0 0 0 20px;
+
+            flex: auto;
+        }
+
+
+
+

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="투표 리스트" />
+<meta property="og:description" content="투표 리스트 입니다" />
+<meta property="og:image" content="https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg" />
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
+    <title>투표 리스트</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
+          rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .mypic {
+            width: 100%;
+            height: 300px;
+
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('http://www.coindeskkorea.com/news/photo/201805/20180531_1_22123.jpg');
+            background-position: center 30%;
+            background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .mycards {
+            width: 95%;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .mycards .card{
+            margin-top : 10px;
+        }
+
+
+    </style>
+    <script>
+
+    </script>
+</head>
+<body>
+<div class="container text-center">
+    <div class="row" style="height: 100%">
+        <div class="col-xs-2 col-sm-1 col-md-2 col-lg-3 col-xl-3 col-xxl-4" >
+
+        </div>
+        <div class="col-xs-8 col-sm-10 col-md-8 col-lg-6 col-xl-6 col-xxl-4"  style="background-color: #FFD945" >
+
+            <div class="card align-middle" style="width:100%; border-radius:20px;margin:10px 0 10px 0;">
+                <div class="card-title" style="margin-top:30px;">
+                    <h2 class="card-title text-center" style="font-size:30px;color:#113366;">투표 작성</h2>
+                </div>
+                <div class="card-body">
+
+                    <div class="container">
+                        <div class="input-form-backgroud row">
+                            <div class="input-form col-md-12 mx-auto">
+
+                                <form class="validation-form" novalidate>
+
+                                    <div class="mb-3">
+                                        <label for="title">투표 주제</label>
+                                        <input type="text" class="form-control" id="title" required>
+
+                                    </div>
+
+
+                                    <div class="mb-3">
+                                        <label for="vote1">항목1</label>
+                                        <input type="text" class="form-control" id="vote1" required>
+
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="vote2">항목2</label>
+                                        <input type="text" class="form-control" id="vote2" required>
+
+                                    </div>
+
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <button class="btn btn-danger btn-lg btn-block" type="submit">취소</button>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <button class="btn btn-primary btn-lg btn-block" type="submit">가입 완료</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-2 col-sm-1 col-md-2 col-lg-3 col-xl-3 col-xxl-4 >
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

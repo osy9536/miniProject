@@ -30,7 +30,7 @@
         .mypic {
             width: 100%;
             height: 300px;
-            margin:10px 0 10px 0;
+
             background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('http://www.coindeskkorea.com/news/photo/201805/20180531_1_22123.jpg');
             background-position: center 30%;
             background-size: cover;
@@ -115,17 +115,85 @@
         <div class="col-xs-2 col-sm-1 col-md-2 col-lg-3 col-xl-3 col-xxl-4" >
 
         </div>
-        <div class="col-xs-8 col-sm-10 col-md-8 col-lg-6 col-xl-6 col-xxl-4"  style="background-color: #FFD945" >
-            <div class="mypic">
-                <h1>투표 리스트</h1>
+        <div class="col-xs-8 col-sm-10 col-md-8 col-lg-6 col-xl-6 col-xxl-4"  style="background-color: #FFD945 " >
+            <div class="card text-center" style ="margin:6px -4px 6px -4px;">
+                <div class="card-header">
+                    작성자 ID
+                </div>
+                <div class="card-body">
 
+
+                    <h5 class="card-title">짜장면이냐 짬뽕이냐</h5>
+                    <div class="card text-center mb-3" style="width: 100%;">
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    짜장
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card text-center mb-3" style="width: 100%;">
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    짬뽕
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="button">투표하기</button>
+                    </div>
+                    <p></p>
+
+                    <h5 class="card-title">짜장면이냐 짬뽕이냐</h5>
+                    <div class="card text-center mb-3" style="width: 100%;">
+                        <div class="card-body">
+                            <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-success" style="width: 25%"></div>
+                            </div>
+                            <h5 class="card-title">짜장</h5>
+                        </div>
+                    </div>
+                     <div class="card text-center mb-3" style="width: 100%;">
+                        <div class="card-body">
+                            <div class="progress" role="progressbar" aria-label="Danger example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-danger" style="width: 75%"></div>
+                            </div>
+                            <h5 class="card-title">짬뽕</h5>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="card-footer text-muted">
+                    2 days ago
+                </div>
             </div>
-            <div class="d-grid gap-2">
-                <button class="btn btn-primary" style ="margin-top:5px" type="button" onclick="voteInsert()">투표 등록</button>
+            <div class="card text-bg-secondary mb-3" style="max-width: 100%;">
+                <div class="card text-bg-secondary mb-3" style="max-width: 100%;">
+
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-person-circle"></i>짜장매니아</h5>
+                        <p class="card-text">짜장이 최고지</p>
+                    </div>
+                </div>
             </div>
+             <div class="card text-bg-secondary mb-3" style="max-width: 100%;">
+                <div class="card text-bg-secondary mb-3" style="max-width: 100%;">
 
-            <div class="mycards" id="voteList" style="width: 100%;">
-
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-person-circle"></i>짬뽕매니아</h5>
+                        <p class="card-text">짬뽕이 최고지</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-xs-2 col-sm-1 col-md-2 col-lg-3 col-xl-3 col-xxl-4 >
